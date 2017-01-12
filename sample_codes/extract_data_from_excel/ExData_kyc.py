@@ -42,7 +42,7 @@ def extract_data_from_excel_by_sheet_name(workbook, sheet_name):
 
 
 if __name__ == "__main__":
-    file_name = 'ExData_kyc.py.xlsx'
+    file_name = 'ExData_kyc.xlsx'
     wb = xlrd.open_workbook(file_name)
     # print(wb.sheet_names())
     sh_names = ['4Y', '4K', '4S', '4J']
