@@ -100,7 +100,7 @@ class ToolBox(object):
         if revision_list is None:
             revision_list = []
 
-        page_url = urlopen(fix_url(wiki_url + "/api_v2/op/Getpage_revision_json_data/admin_key/" + wiki_admin_key + "/page/" + page_name)).read()
+        page_url = urlopen(fix_url(wiki_url + "/api_v2/op/GetPageRevisions/admin_key/" + wiki_admin_key + "/page/" + page_name)).read()
         page_text = page_url.strip('/*-secure- \n')
         page_revision_json_data = json.loads(page_text)
 

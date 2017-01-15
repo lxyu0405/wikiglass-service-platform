@@ -31,7 +31,7 @@ USER_MODEL_LIST = []
 REVISION_MODEL_LIST = []
 
 try:
-    logging.basicConfig(filename=LOGFILE, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
+    # logging.basicConfig(filename=LOGFILE, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
 
     # Connect to pbworks_db database
     cnx = mysql.connector.connect(user=PB_DB_USERNAME, password=PB_DB_PWD, host=PB_DB_HOST, database=PB_DB_NAME, charset='utf8mb4')

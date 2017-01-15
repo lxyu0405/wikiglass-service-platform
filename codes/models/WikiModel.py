@@ -13,13 +13,13 @@ class WikiModel(object):
     class_name = ''
     admin_key = ''
 
-    def __init__(self, wiki_id, wiki_url, year, school, grade, _class, group_no, class_name, admin_key):
-        self.wiki_id = wiki_id
-        self.wiki_url = wiki_url
-        self.year = year
-        self.school = school
-        self.grade = grade
-        self._class = _class
-        self.group_no = group_no
-        self.class_name = class_name
-        self.admin_key = admin_key
+    def __init__(self):
+        self.wiki_id = ''
+        self.wiki_url = ''
+        self.year = 0
+        self.school = ''
+        self.grade = 0
+        self._class = ''
+        self.group_no = ''
+        self.class_name = ''
+        self.admin_key = ''
