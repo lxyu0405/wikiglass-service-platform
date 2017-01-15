@@ -7,7 +7,7 @@ import ConfigParser
 from mysql.connector import errorcode
 
 # diy library
-from codes.common.utils import ToolBox
+from codes.common.common_utils import ToolBox
 from codes.models.WikiModel import WikiModel
 
 

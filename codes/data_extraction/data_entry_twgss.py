@@ -7,7 +7,8 @@ import ConfigParser
 from mysql.connector import errorcode
 
 # diy library
-from codes.common.utils import ToolBox
+from codes.common.common_utils import ToolBox
+from codes.common.log_utils import LogTools
 from codes.models.WikiModel import WikiModel
 
 
@@ -61,6 +62,8 @@ try:
             ToolBox.get_revision_list(wiki_model.wiki_url, wiki_model.admin_key,
                                       page_model.page_id, page_model.page_name, REVISION_MODEL_LIST)
 
+        print(LogTools.wikiInfo(wiki_model.wiki_id, PAGE_MODEL_LIST, USER_MODEL_LIST, REVISION_MODEL_LIST))
+
         # Insert data into table Page
         for page_model in PAGE_MODEL_LIST:
             cur.execute("""INSERT INTO Page (page_id,wiki_id,page_name,page_url)
@@ -88,8 +91,6 @@ try:
 
         # Insert data into table Revision
         for revision_model in REVISION_MODEL_LIST:
-            print(revision_model.page_id + " " + str(revision_model.timestamp) + " " + str(revision_model.version)
-                          + " " + str(revision_model.oid) + " " + revision_model.user_id)
             if revision_model.user_id != 'Error':
                 cur.execute("""INSERT INTO Revision (page_id, timestamp, version, oid, user_id, content)
                 select * from (select %s, %s, %s, %s, %s, %s) as tmp
@@ -98,6 +99,7 @@ try:
                              revision_model.oid, revision_model.user_id, revision_model.content,
                              revision_model.page_id, revision_model.version + 1))
             cnx.commit()
+
         # clear list to get it ready for next wiki
         PAGE_MODEL_LIST = []
         USER_MODEL_LIST = []
