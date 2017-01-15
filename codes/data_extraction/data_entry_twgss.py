@@ -32,7 +32,7 @@ USER_MODEL_LIST = []
 REVISION_MODEL_LIST = []
 
 try:
-    # logging.basicConfig(filename=LOGFILE, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
+    logging.basicConfig(filename=LOGFILE, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
 
     # Connect to pbworks_db database
     cnx = mysql.connector.connect(user=PB_DB_USERNAME, password=PB_DB_PWD, host=PB_DB_HOST, database=PB_DB_NAME, charset='utf8mb4')
@@ -51,7 +51,7 @@ try:
         WIKI_MODEL_LIST.append(wiki_model)
 
     for wiki_model in WIKI_MODEL_LIST:
-        print(wiki_model.wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_model.admin_key + "/object_types/page")
+        logging.debug(wiki_model.wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_model.admin_key + "/object_types/page")
         # prepare data for page list
         ToolBox.get_page_list(wiki_model.wiki_id, wiki_model.wiki_url, wiki_model.admin_key, PAGE_MODEL_LIST)
         # prepare data for user list
@@ -62,7 +62,7 @@ try:
             ToolBox.get_revision_list(wiki_model.wiki_url, wiki_model.admin_key,
                                       page_model.page_id, page_model.page_name, REVISION_MODEL_LIST)
 
-        print(LogTools.wikiInfo(wiki_model.wiki_id, PAGE_MODEL_LIST, USER_MODEL_LIST, REVISION_MODEL_LIST))
+        logging.debug(LogTools.wikiInfo(wiki_model.wiki_id, PAGE_MODEL_LIST, USER_MODEL_LIST, REVISION_MODEL_LIST))
 
         # Insert data into table Page
         for page_model in PAGE_MODEL_LIST:

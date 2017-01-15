@@ -8,6 +8,7 @@ from mysql.connector import errorcode
 
 # diy library
 from codes.common.common_utils import ToolBox
+from codes.common.log_utils import LogTools
 from codes.models.WikiModel import WikiModel
 
 
@@ -50,7 +51,7 @@ try:
         WIKI_MODEL_LIST.append(wiki_model)
 
     for wiki_model in WIKI_MODEL_LIST:
-        print(wiki_model.wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_model.admin_key + "/object_types/page")
+        logging.debug(wiki_model.wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_model.admin_key + "/object_types/page")
         # prepare data for page list
         ToolBox.get_page_list(wiki_model.wiki_id, wiki_model.wiki_url, wiki_model.admin_key, PAGE_MODEL_LIST)
         # prepare data for user list
@@ -60,6 +61,8 @@ try:
         for page_model in PAGE_MODEL_LIST:
             ToolBox.get_revision_list(wiki_model.wiki_url, wiki_model.admin_key,
                                       page_model.page_id, page_model.page_name, REVISION_MODEL_LIST)
+
+        logging.debug(LogTools.wikiInfo(wiki_model.wiki_id, PAGE_MODEL_LIST, USER_MODEL_LIST, REVISION_MODEL_LIST))
 
         # Insert data into table Page
         for page_model in PAGE_MODEL_LIST:
@@ -88,8 +91,6 @@ try:
 
         # Insert data into table Revision
         for revision_model in REVISION_MODEL_LIST:
-            print(revision_model.page_id + " " + str(revision_model.timestamp) + " " + str(revision_model.version)
-                          + " " + str(revision_model.oid) + " " + revision_model.user_id)
             if revision_model.user_id != 'Error':
                 cur.execute("""INSERT INTO Revision (page_id, timestamp, version, oid, user_id, content)
                 select * from (select %s, %s, %s, %s, %s, %s) as tmp
