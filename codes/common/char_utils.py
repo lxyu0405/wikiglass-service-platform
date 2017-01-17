@@ -42,3 +42,9 @@ class CharTools(object):
                 break
         return False
 
+    @staticmethod
+    def average_sentences_length(content):
+        period_cnt = content.count(u'。')
+        comma_cnt = content.count(',') + content.count(u'，')
+        question_mark_cnt = content.count('?') + content.count(u'？')
+        return len(content) / (period_cnt + comma_cnt + question_mark_cnt + 1)

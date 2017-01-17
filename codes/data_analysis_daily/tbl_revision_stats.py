@@ -116,7 +116,8 @@ try:
 
             # remove html tags, nbsp, \n from raw content
             # replace is used to fix CONTENT
-            revision_model.content = CharTools.clean_nbsp(CharTools.clean_spaces(CharTools.clean_html_tags(revision_model.content)))
+            revision_model.content = CharTools.clean_nbsp(CharTools.clean_meaningless_symbol(
+                CharTools.clean_spaces(CharTools.clean_html_tags(revision_model.content))))
             revision_model.no_of_words = len(revision_model.content)
 
             word_addition, word_deletion, word_changes = 0, 0, 0

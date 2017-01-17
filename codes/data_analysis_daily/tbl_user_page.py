@@ -109,7 +109,11 @@ try:
                                 Total_words_deletion = if( Total_words_deletion <> values(Total_words_deletion),
                                 values(Total_words_deletion), Total_words_deletion ),
                                 Total_words_change = if( Total_words_change <> values(Total_words_change),
-                                values(Total_words_change), Total_words_change ) """,
+                                values(Total_words_change), Total_words_change ),
+                                High_level_thinking = if( High_level_thinking <> values(High_level_thinking),
+                                values(High_level_thinking), High_level_thinking ),
+                                Low_level_thinking = if( Low_level_thinking <> values(Low_level_thinking),
+                                values(Low_level_thinking), Low_level_thinking ) """,
                                 (user_id, user_name, user_no, user_perm, page_id, count, total_words_addition,
                                  total_words_deletion, total_words_changes, high_lvl_count, low_lvl_count))
                 cnx.commit()

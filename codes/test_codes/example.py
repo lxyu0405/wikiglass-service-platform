@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import ConfigParser
 
+from codes.common.char_utils import CharTools
 
 CONFIG = ConfigParser.ConfigParser()
 # config file path
@@ -26,10 +28,15 @@ def test_list_param(this_list):
         this_list.append(1)
 
 if __name__ == "__main__":
+    test_string = u'让我来写一个hello world'
+    print(test_string)
+    print(CharTools.clean_alph(test_string))
+    '''
     list = []
     print(list) #[0]
     test_list_param(list)
-    print(list) # [0,1]
+    print(list) # [0,1]'''
+
     '''
     print("year: " + YEAR)
     print("db_username: " + PB_DB_USERNAME)

@@ -37,36 +37,35 @@ try:
         cur.execute(""" SELECT User_id, User_name, User_no, User_perm, COUNT(*), SUM(No_of_involved_revision),
                         SUM(Total_words_addition), SUM(Total_words_deletion), SUM(Total_words_change)
                         FROM User_stats_by_page
-                        WHERE page_id LIKE '{0}\_%' GROUP BY User_id ORDER BY User_no""".format(wiki[0]))
+                        WHERE page_id LIKE '{0}\_%'
+                        GROUP BY User_id
+                        ORDER BY User_no""".format(wiki[0]))
         student = cur.fetchall()
 
         # Loop through all students
         for row in student:
-            user_id = row[0]
-            user_name = row[1]
-            user_no = row[2]
-            user_perm = row[3]
-            count = row[4]
-            total_involved_revision = row[5]
-            total_words_addition = row[6]
-            total_words_deletion = row[7]
-            total_words_changes = row[8]
+            user_id = '' if row[0] is None else row[0]
+            user_name = '' if row[1] is None else row[1]
+            user_no = '' if row[2] is None else row[2]
+            user_perm = '' if row[3] is None else row[3]
+            count = 0 if row[4] is None else row[4]
+            total_involved_revision = 0 if row[5] is None else row[5]
+            total_words_addition = 0 if row[6] is None else row[6]
+            total_words_deletion = 0 if row[7] is None else row[7]
+            total_words_changes = 0 if row[8] is None else row[8]
 
-            # Handling null cases
-            if user_id is None:
-                user_id = " "
-            if user_name is None:
-                user_name = " "
-            if user_no is None:
-                user_no = " "
-            if user_perm is None:
-                user_perm = " "
-            if total_words_addition is None:
-                total_words_addition = 0
-            if total_words_deletion is None:
-                total_words_deletion = 0
-            if total_words_changes is None:
-                total_words_changes = 0
+            cur.execute("""SELECT sentence_id, level
+                            FROM Sentence_quality
+                            WHERE user_id = '""" + user_id + "' AND page_id LIKE '{0}\_%'".format(wiki[0]))
+            sentence_lvl_list = cur.fetchall()
+
+            low_lvl_count, high_lvl_count = 0, 0
+            for sentence_lvl in sentence_lvl_list:
+                sentence_lvl_level = sentence_lvl[1]
+                if sentence_lvl_level == "level 1":
+                    low_lvl_count += 1
+                if sentence_lvl_level == "level 3":
+                    high_lvl_count += 1
 
             # Get the count of pages without any revisions by that student
             cur.execute(""" SELECT count(*) AS user_count
@@ -83,13 +82,15 @@ try:
                           + ", total_revision: " + str(total_involved_revision)
                           + ", addition: " + str(total_words_addition)
                           + ", deletion: " + str(total_words_deletion)
-                          + ", changes: " + str(total_words_changes))
+                          + ", changes: " + str(total_words_changes)
+                          + ", low_lvl_count: " + str(low_lvl_count)
+                          + ", high_lvl_count: " + str(high_lvl_count))
 
             # Insert to User_stats_by_group
             cur.execute(""" INSERT INTO User_stats_by_group (User_id, User_name, User_no, User_perm, Group_id,
                             Total_involved_pages, Total_involved_revisions, Total_words_addition, Total_words_deletion,
                             Total_words_change, High_level_thinking, Low_level_thinking)
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0, 0) ON duplicate key UPDATE
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
                             Total_involved_pages = if( Total_involved_pages <> values(Total_involved_pages),
                             values(Total_involved_pages), Total_involved_pages ),
                             Total_involved_revisions = if( Total_involved_revisions <> values(Total_involved_revisions),
@@ -99,8 +100,14 @@ try:
                             Total_words_deletion = if( Total_words_deletion <> values(Total_words_deletion),
                             values(Total_words_deletion), Total_words_deletion ),
                             Total_words_change = if( Total_words_change <> values(Total_words_change),
-                            values(Total_words_change), Total_words_change ) """,
-                            (user_id, user_name, user_no, user_perm, wiki[0], count, total_involved_revision, total_words_addition, total_words_deletion, total_words_changes))
+                            values(Total_words_change), Total_words_change ),
+                            High_level_thinking = if( High_level_thinking <> values(High_level_thinking),
+                            values(High_level_thinking), High_level_thinking ),
+                            Low_level_thinking = if( Low_level_thinking <> values(Low_level_thinking),
+                            values(Low_level_thinking), Low_level_thinking ) """,
+                            (user_id, user_name, user_no, user_perm, wiki[0], count, total_involved_revision,
+                             total_words_addition, total_words_deletion, total_words_changes, high_lvl_count,
+                             low_lvl_count))
             cnx.commit()
 
     # Close	mysql database connection

@@ -46,17 +46,30 @@ try:
 
     for group_model in GROUP_MODEL_LIST:
         # Get the page count of that wiki
-        cur.execute("SELECT count(*) FROM Page WHERE wiki_id = '" + group_model.wiki_id + "'")
-        page_count = cur.fetchone()
-        total_pages = int(page_count[0])
-        total_words = 0
+        cur.execute("SELECT page_id, wiki_id FROM Page WHERE wiki_id = '" + group_model.wiki_id + "'")
+        page_info_list = cur.fetchall()
+        total_pages = len(page_info_list)
 
-        # Get sentenece quality info of the group
+        # Get the total words of the latest revision of that group from Revision_stats
+        total_words = 0
+        for page_info in page_info_list:
+            cur.execute("""SELECT IFNULL(Total_words, 0)
+                            FROM Revision_Stats
+                            WHERE Page_id = %s AND Revision_index =
+                            (   SELECT MAX(Revision_index)
+                                FROM Revision_Stats
+                                WHERE Page_id = %s
+                                GROUP BY Page_id)""", (page_info[0], page_info[0]))
+            latest_revision = cur.fetchone()
+            if latest_revision is None:
+                continue
+            total_words += latest_revision[0]
+
+        # Get sentence quality info of the group
         cur.execute("SELECT sentence_id, level FROM Sentence_quality WHERE page_id LIKE '{0}\_%' ".format(group_model.wiki_id))
         sentence_lvl_list = cur.fetchall()
 
         low_lvl_count, high_lvl_count = 0, 0
-
         for sentence_lvl in sentence_lvl_list:
             sentence_lvl_level = sentence_lvl[1]
             if sentence_lvl_level == "level 1":
@@ -64,18 +77,26 @@ try:
             if sentence_lvl_level == "level 3":
                 high_lvl_count += 1
 
-        logging.debug("[tbl_group] wiki_id: " + group_model.wiki_id + ", class_id: " + group_model.class_name +
-                      ", group_index: " + str(group_model.group_no) + ", total_pages: " + str(total_pages) +
-                      ", low_level_count: " + str(low_lvl_count) + ", high_level_count: " + str(high_lvl_count))
+        logging.debug("[tbl_group] wiki_id: " + group_model.wiki_id
+                      + ", class_id: " + group_model.class_name
+                      + ", group_index: " + str(group_model.group_no)
+                      + ", total_pages: " + str(total_pages)
+                      + ", low_level_count: " + str(low_lvl_count)
+                      + ", high_level_count: " + str(high_lvl_count)
+                      + ", total_words: " + str(total_words))
 
         # Insert to Group_Stats
         cur.execute("""INSERT INTO Group_Stats
                         (Wiki_id, Class_id, Group_index, No_of_pages, No_of_words, High_level_thinking, Low_level_thinking)
                         VALUES (%s, %s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
-                        No_of_pages = if( No_of_pages <> values(No_of_pages), values(No_of_pages), No_of_pages )
-                        High_level_thinking = if ( High_level_thinking <> values(High_level_thinking), values(High_level_thinking), High_level_thinking )
-                        Low_level_thinking = if ( Low_level_thinking <> values(Low_level_thinking), values(Low_level_thinking), Low_level_thinking )""",
-                    (group_model.wiki_id, group_model.class_name, group_model.group_no, total_pages, total_words, high_lvl_count, low_lvl_count))
+                        No_of_pages = if( No_of_pages <> values(No_of_pages), values(No_of_pages), No_of_pages ),
+                        No_of_words = if ( No_of_words <> values(No_of_words), values(No_of_words), No_of_words ),
+                        High_level_thinking = if ( High_level_thinking <> values(High_level_thinking),
+                        values(High_level_thinking), High_level_thinking ),
+                        Low_level_thinking = if ( Low_level_thinking <> values(Low_level_thinking),
+                        values(Low_level_thinking), Low_level_thinking )""",
+                    (group_model.wiki_id, group_model.class_name, group_model.group_no, total_pages, total_words,
+                     high_lvl_count, low_lvl_count))
         cnx.commit()
 
     # Close	mysql database connection
