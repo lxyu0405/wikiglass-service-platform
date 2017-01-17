@@ -61,6 +61,7 @@ try:
         while day_start < end_time:
             print datetime.datetime.fromtimestamp(day_start).strftime('%Y-%m-%d %H:%M:%S')
             day_end = day_start + 86399
+            day_end_string = datetime.datetime.fromtimestamp(day_end).strftime('%Y-%m-%d %H:%M:%S')
 
             # Revision count region
             if True:
@@ -164,6 +165,134 @@ try:
                                         values(word_amendment_count), word_amendment_count )""",
                                         (student[1], student[0], 0, day_start_string))
                 cnx.commit()
+
+            # Sentence level count region
+            if True:
+                low_lvl_dict, high_lvl_dict, user_group_dict, user_name_dict = {}, {}, {}, {}
+
+                cur.execute(""" SELECT User_id, User_name, Group_id
+                                FROM User_stats_by_group
+                                WHERE User_perm = 'write' AND Group_id LIKE '""" + YEAR + "%'")
+                user_info_list = cur.fetchall()
+
+                for user_info in user_info_list:
+                    user_info_user_id = user_info[0]
+                    user_info_user_name = user_info[1]
+                    user_info_group_id = user_info[2]
+                    # save pair(user_id, user_name) information
+                    user_name_dict[user_info_user_id] = user_info_user_name
+                    # save pair(user_id, group_id) information
+                    user_group_dict[user_info_user_id] = user_info_group_id
+                    # initialize low_lvl_thinking dictionary
+                    low_lvl_dict[user_info_user_id] = 0
+                    # initialize high_lvl_thinking dictionary
+                    high_lvl_dict[user_info_user_id] = 0
+
+                # get all students information
+                cur.execute(""" SELECT user_name, user_id, level
+                                FROM Sentence_quality
+                                WHERE timestamp BETWEEN %s AND %s""", (day_start, day_end))
+                sentence_info_list = cur.fetchall()
+
+                logging.debug("[tbl_daily_sentence_lvl_count] " + day_start_string + " -> " + day_end_string
+                              + " : " + str(len(sentence_info_list)))
+
+                # extract useful information from SQL query result
+                for sentence in sentence_info_list:
+                    sentence_user_name = sentence[0]
+                    sentence_user_id = sentence[1]
+                    sentence_level = sentence[2]
+
+                    if sentence_user_id not in low_lvl_dict.keys():
+                        low_lvl_dict[sentence_user_id] = 0
+                    if sentence_user_id not in high_lvl_dict.keys():
+                        high_lvl_dict[sentence_user_id] = 0
+                    # count low thinking level
+                    if sentence_level == "level 1":
+                        low_lvl_dict[sentence_user_id] += 1
+                    # count high thinking level
+                    if sentence_level == "level 3":
+                        high_lvl_dict[sentence_user_id] += 1
+
+                # summarize data and insert into Daily_sentence_level_stats table
+                for sum_user_id in user_group_dict.keys():
+                    sum_group_id = user_group_dict[sum_user_id]
+                    sum_user_name = user_name_dict[sum_user_id]
+                    sum_low_thinking_cnt = low_lvl_dict[sum_user_id]
+                    sum_high_thinking_cnt = high_lvl_dict[sum_user_id]
+
+                    cur.execute(""" INSERT IGNORE INTO Daily_sentence_level_stats (group_id, student_name,
+                                    high_thinking_count, low_thinking_count, ts_day_start, ts)
+                                    VALUES (%s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
+                                    high_thinking_count = if ( high_thinking_count <> values(high_thinking_count),
+                                    values(high_thinking_count), high_thinking_count ),
+                                    low_thinking_count = if ( low_thinking_count <> values(low_thinking_count),
+                                    values(low_thinking_count), low_thinking_count )""",
+                                (sum_group_id, sum_user_name, sum_high_thinking_cnt, sum_low_thinking_cnt,
+                                 day_start_string, day_end_string))
+                    cnx.commit()
+
+            # revision_relation_stats region
+            if True:
+                cur.execute(""" SELECT DISTINCT(rr.group_id)
+                                    FROM Revision_relation AS rr
+                                    WHERE rr.revision_id IN
+                                    (
+                                        SELECT r.revision_id
+                                        FROM Revision AS r
+                                        WHERE r.timestamp BETWEEN %s AND %s
+                                    )""", (day_start, day_end))
+
+                group_id_list = cur.fetchall()
+                logging.debug("[tbl_revision_relation_stats_daily] " + day_start_string
+                              + " ~ " + day_end_string + ": " + str(len(group_id_list)))
+
+                for group_id in group_id_list:
+                    cur.execute(""" SELECT DISTINCT(User_id), User_name
+                                    FROM User_stats_by_group
+                                    WHERE User_perm = 'write' AND Group_id = '""" + group_id[0] + "'")
+                    group_member_list = cur.fetchall()
+
+                    group_stats_dict = {}
+                    # create dict for statistics
+                    for i in range(len(group_member_list)):
+                        for j in range(len(group_member_list)):
+                            new_key = group_member_list[i][0] + "&^&" + group_member_list[i][1] + "->" + \
+                                     group_member_list[j][0] + "&^&" + group_member_list[j][1]
+                            group_stats_dict[new_key] = 0
+
+                    cur.execute("""SELECT rr.user_from_id, rr.user_from_name, rr.user_to_id, rr.user_to_name
+                                    FROM Revision_relation AS rr
+                                    WHERE rr.group_id = %s AND rr.revision_id IN
+                                    (   SELECT r.revision_id
+                                        FROM Revision AS r
+                                        WHERE r.timestamp BETWEEN %s AND %s
+                                    )""", (group_id[0], day_start, day_end))
+                    group_revision_list = cur.fetchall()
+
+                    for group_revision in group_revision_list:
+                        this_key = group_revision[0] + "&^&" + group_revision[1] + "->" + \
+                                   group_revision[2] + "&^&" + group_revision[3]
+                        if this_key not in group_stats_dict.keys():
+                            continue
+                        else:
+                            group_stats_dict[this_key] += 1
+
+                    # analyze the result in group_stats_dict
+                    for key in group_stats_dict.keys():
+                        user_from, user_to = key.split("->")
+                        user_from_id, user_from_name = user_from.split("&^&")
+                        user_to_id, user_to_name = user_to.split("&^&")
+                        logging.debug("Insert Revision_relation_stats_daily "
+                                      + user_from_id + " (" + user_from_name + ") -> "
+                                      + user_to_id + " (" + user_to_name + ") [" + str(group_stats_dict[key]) + "]")
+
+                        cur.execute(""" INSERT INTO Revision_relation_stats_daily (user_from_id, user_from_name,
+                                        user_to_id, user_to_name, group_id, total_revision_count, time_stamp)
+                                        VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                                    (user_from_id, user_from_name, user_to_id, user_to_name, group_id[0],
+                                     group_stats_dict[key], day_start_string))
+                        cnx.commit()
 
             # Next day
             day_start += 86400
