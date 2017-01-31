@@ -1,5 +1,5 @@
 #!/bin/bash
-sendMailDir="/home/oper/wikiglass-data-service/codes/send_mail/"
+sendMailDir="/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/send_email/"
 
 now=$(date +"%T")
 
