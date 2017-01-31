@@ -9,6 +9,9 @@ import ConfigParser
 from mysql.connector import errorcode
 from datetime import timedelta
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 CONFIG = ConfigParser.ConfigParser()
 # config file path
