@@ -1,7 +1,7 @@
 #!/bin/bash
 # Weekly Database Update
 
-weeklyPyDir="~/wikiglass-data-service/codes/data_analysis_weekly/"
+weeklyPyDir="/home/oper/wikiglass-data-service/codes/data_analysis_weekly/"
 
 now=$(date +"%T")
 

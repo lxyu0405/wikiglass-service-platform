@@ -2,7 +2,7 @@
 # daily Database Update
 # The execute order is important
 
-dailyPyDir="~/wikiglass-data-service/codes/data_analysis_daily/"
+dailyPyDir="/home/oper/wikiglass-data-service/codes/data_analysis_daily/"
 
 now=$(date +"%T")
 

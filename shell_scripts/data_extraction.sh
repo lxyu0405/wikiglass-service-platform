@@ -1,7 +1,7 @@
 #!/bin/bash
 # Wiki Data Extraction
 
-extractPyDir="~/wikiglass-data-service/codes/data_extraction/"
+extractPyDir="/home/oper/wikiglass-data-service/codes/data_extraction/"
 
 now=$(date +"%T")
 
