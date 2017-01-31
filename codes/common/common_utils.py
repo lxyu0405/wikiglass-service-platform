@@ -6,7 +6,7 @@ import json
 from urllib import urlopen
 
 import sys
-sys.path.append('/Users/luxy/Desktop/wikiGlassSys/wikiglass-service-platform/codes/models')
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/models')
 
 # diy library
 from PageModel import PageModel

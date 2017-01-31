@@ -7,8 +7,8 @@ import ConfigParser
 from mysql.connector import errorcode
 
 import sys
-sys.path.append('/Users/luxy/Desktop/wikiGlassSys/wikiglass-service-platform/codes/common')
-sys.path.append('/Users/luxy/Desktop/wikiGlassSys/wikiglass-service-platform/codes/models')
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/common')
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/models')
 
 # diy library
 from common_utils import ToolBox
