@@ -1,11 +1,9 @@
 #!/bin/bash
 
-dbBackupDir="~/wikiglass-data-service/resources/pbworks_db-backup/"
-
 now=$(date +"%Y%m%d")
 old=$(date +"%Y%m%d" -d "5 days ago")
-newFile=pbworks_$now.sql
-oldFile=${dbBackupDir}pbworks_$old.sql
+newfile=pbworks_$now.sql
+oldfile=/home/oper/wikiglass-data-service/resources/pbworks_db-backup/pbworks_$old.sql
 
 if [ -f $oldfile ] ; then
 	rm $oldfile
@@ -15,5 +13,5 @@ else
 fi
 
 echo "Start back up"
-mysqldump -upbworks_usr -ppbworks_usr pbworks_db > ${dbBackupDir}$newfile
+mysqldump -upbworks_usr -ppbworks_usr pbworks_db > /home/oper/wikiglass-data-service/resources/pbworks_db-backup/$newfile
 echo "Complete back up"
