@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dbBackupDir="~/wikiglass-data-service/resource/pbworks_db-backup/"
+dbBackupDir="~/wikiglass-data-service/resources/pbworks_db-backup/"
 
 now=$(date +"%Y%m%d")
 old=$(date +"%Y%m%d" -d "5 days ago")
