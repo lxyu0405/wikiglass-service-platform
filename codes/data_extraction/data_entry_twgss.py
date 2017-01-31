@@ -6,10 +6,14 @@ import logging
 import ConfigParser
 from mysql.connector import errorcode
 
+import sys
+sys.path.append('/Users/luxy/Desktop/wikiGlassSys/wikiglass-service-platform/codes/common')
+sys.path.append('/Users/luxy/Desktop/wikiGlassSys/wikiglass-service-platform/codes/models')
+
 # diy library
-from codes.common.common_utils import ToolBox
-from codes.common.log_utils import LogTools
-from codes.models.WikiModel import WikiModel
+from common_utils import ToolBox
+from log_utils import LogTools
+from WikiModel import WikiModel
 
 
 CONFIG = ConfigParser.ConfigParser()

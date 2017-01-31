@@ -5,11 +5,6 @@ import urlparse
 import json
 from urllib import urlopen
 
-# diy library
-from codes.models.PageModel import PageModel
-from codes.models.UserModel import UserModel
-from codes.models.RevisionModel import RevisionModel
-
 
 class LogTools(object):
     @staticmethod

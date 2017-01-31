@@ -5,10 +5,13 @@ import urlparse
 import json
 from urllib import urlopen
 
+import sys
+sys.path.append('/Users/luxy/Desktop/wikiGlassSys/wikiglass-service-platform/codes/models')
+
 # diy library
-from codes.models.PageModel import PageModel
-from codes.models.UserModel import UserModel
-from codes.models.RevisionModel import RevisionModel
+from PageModel import PageModel
+from UserModel import UserModel
+from RevisionModel import RevisionModel
 
 
 def fix_url(url):
