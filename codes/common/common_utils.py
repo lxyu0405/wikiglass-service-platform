@@ -55,10 +55,16 @@ class ToolBox(object):
         if page_list is None:
             page_list = []
 
-        page_url = urlopen(
-            wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_admin_key + "/object_types/page").read()
-        page_text = page_url.strip('/*-secure- \n')
-        page_json_data = json.loads(page_text)
+        page_json_data = ''
+        while True:
+            try:
+                page_url = urlopen(
+                    wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_admin_key + "/object_types/page").read()
+                page_text = page_url.strip('/*-secure- \n')
+                page_json_data = json.loads(page_text)
+                break
+            except ValueError:
+                print "Repeat the GetObjectsNOM process again."
 
         # Prepare data for Page table
         page_number = page_json_data["_total_page"]
@@ -103,9 +109,15 @@ class ToolBox(object):
         if revision_list is None:
             revision_list = []
 
-        page_url = urlopen(fix_url(wiki_url + "/api_v2/op/GetPageRevisions/admin_key/" + wiki_admin_key + "/page/" + page_name)).read()
-        page_text = page_url.strip('/*-secure- \n')
-        page_revision_json_data = json.loads(page_text)
+        page_revision_json_data = ''
+        while True:
+            try:
+                page_url = urlopen(fix_url(wiki_url + "/api_v2/op/GetPageRevisions/admin_key/" + wiki_admin_key + "/page/" + page_name)).read()
+                page_text = page_url.strip('/*-secure- \n')
+                page_revision_json_data = json.loads(page_text)
+                break
+            except ValueError:
+                print "Repeated the GetPageRevisions process again."
 
         version = 1
         for tstamp in page_revision_json_data["revisions"]:
@@ -114,9 +126,15 @@ class ToolBox(object):
             revision_model.page_id = page_id
             revision_model.version = version
 
-            revision_url = urlopen(fix_url(wiki_url + "/api_v2/op/GetPage/admin_key/" + wiki_admin_key + "/page/" + page_name + "/revision/" + str(revision_model.timestamp))).read()
-            revision_text = revision_url.strip('/*-secure- \n')
-            revision_json_data = json.loads(revision_text)
+            revision_json_data = ''
+            while True:
+                try:
+                    revision_url = urlopen(fix_url(wiki_url + "/api_v2/op/GetPage/admin_key/" + wiki_admin_key + "/page/" + page_name + "/revision/" + str(revision_model.timestamp))).read()
+                    revision_text = revision_url.strip('/*-secure- \n')
+                    revision_json_data = json.loads(revision_text)
+                    break
+                except ValueError:
+                    print "Repeated the GetPage process again."
 
             if revision_json_data.get('error_string'):
                 revision_model.user_id = 'Error'
