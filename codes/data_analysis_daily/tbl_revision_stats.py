@@ -66,6 +66,8 @@ try:
                         order by version ASC """, (start_unix_timestamp, end_unix_timestamp))
         revision_list = cur.fetchall()
 
+        logging.debug("[tbl_revision] " + start_date_string + " ~ " + end_date_string + ": " + str(len(revision_list)))
+
         # Loop through all revisions in revision list
         for row in revision_list:
             revision_model = RevisionModel()
