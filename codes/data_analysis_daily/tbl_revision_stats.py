@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import mysql.connector
 import ConfigParser
+import datetime
+import time
 import logging
 from mysql.connector import errorcode
 
@@ -26,6 +28,9 @@ PB_DB_HOST = CONFIG.get("pbworks_db_conf", "db_host")
 PB_DB_NAME = CONFIG.get("pbworks_db_conf", "db_name")
 # log file path
 LOGFILE = CONFIG.get("logs_conf", "common_log")
+# in 'daily' mode, only recent data need to be analyzed.
+# else, whole year's data
+RUN_MODE = 2 if CONFIG.get("run_mode", "mode") == 'daily' else 366
 
 REVISION_MODEL_LIST = []
 
@@ -44,13 +49,21 @@ try:
                     WHERE Page.wiki_id = Wiki.wiki_id AND Wiki.year = """ + YEAR)
     page_list = cur.fetchall()
 
+    end_date = datetime.datetime.now()
+    end_unix_timestamp = time.mktime(end_date.timetuple())
+    end_date_string = end_date.strftime("%y-%m-%d %H:%M:%S")
+    start_date = datetime.datetime.now() - datetime.timedelta(days=RUN_MODE)
+    start_unix_timestamp = time.mktime(start_date.timetuple())
+    start_date_string = start_date.strftime("%y-%m-%d %H:%M:%S")
+
     # Loop through all pages in page list
     for page_info in page_list:
         page_id = page_info[0]
         page_wiki_id = page_info[1]
         # Get a full revision list in that page
         cur.execute(""" select revision_id, page_id, version, user_id, timestamp
-                        from Revision where page_id = '""" + page_id + """' order by version ASC """)
+                        from Revision where page_id = '""" + page_id + """' and timestamp between %s and %s
+                        order by version ASC """, (start_unix_timestamp, end_unix_timestamp))
         revision_list = cur.fetchall()
 
         # Loop through all revisions in revision list

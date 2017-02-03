@@ -24,6 +24,9 @@ PB_DB_HOST = CONFIG.get("pbworks_db_conf", "db_host")
 PB_DB_NAME = CONFIG.get("pbworks_db_conf", "db_name")
 # log file path
 LOGFILE = CONFIG.get("logs_conf", "common_log")
+# in 'daily' mode, only recent data need to be analyzed.
+# else, whole year's data
+RUN_MODE = 2 if CONFIG.get("run_mode", "mode") == 'daily' else 366
 
 
 try:
@@ -38,7 +41,7 @@ try:
     end_date = datetime.datetime.now()
     end_unix_timestamp = time.mktime(end_date.timetuple())
     end_date_string = end_date.strftime("%y-%m-%d %H:%M:%S")
-    start_date = datetime.datetime.now() - datetime.timedelta(days=2)
+    start_date = datetime.datetime.now() - datetime.timedelta(days=RUN_MODE)
     start_unix_timestamp = time.mktime(start_date.timetuple())
     start_date_string = start_date.strftime("%y-%m-%d %H:%M:%S")
 
