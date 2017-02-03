@@ -8,7 +8,9 @@ import datetime
 import time
 
 # diy library
-from codes.models.RevisionRelationModel import RevisionRelationModel
+import sys
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/models')
+from RevisionRelationModel import RevisionRelationModel
 
 CONFIG = ConfigParser.ConfigParser()
 # config file path

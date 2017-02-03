@@ -6,9 +6,12 @@ import logging
 from mysql.connector import errorcode
 
 # diy library
-from codes.models.RevisionModel import RevisionModel
-from codes.models.UserModel import UserModel
-from codes.common.char_utils import CharTools
+import sys
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/common')
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/models')
+from RevisionModel import RevisionModel
+from UserModel import UserModel
+from char_utils import CharTools
 
 
 CONFIG = ConfigParser.ConfigParser()

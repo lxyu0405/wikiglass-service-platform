@@ -8,10 +8,13 @@ import ConfigParser
 from mysql.connector import errorcode
 
 # diy library
-from codes.common.char_utils import CharTools
-from codes.models.RevisionModel import RevisionModel
-from codes.models.UserModel import UserModel
-from codes.models.SentenceModel import SentenceQualityModel
+import sys
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/common')
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/models')
+from char_utils import CharTools
+from RevisionModel import RevisionModel
+from UserModel import UserModel
+from SentenceModel import SentenceQualityModel
 
 CONFIG = ConfigParser.ConfigParser()
 # config file path

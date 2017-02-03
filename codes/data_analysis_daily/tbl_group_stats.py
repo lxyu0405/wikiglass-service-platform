@@ -5,7 +5,9 @@ import logging
 from mysql.connector import errorcode
 
 # diy library
-from codes.models.WikiModel import WikiModel
+import sys
+sys.path.append('/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/models')
+from WikiModel import WikiModel
 
 
 CONFIG = ConfigParser.ConfigParser()
