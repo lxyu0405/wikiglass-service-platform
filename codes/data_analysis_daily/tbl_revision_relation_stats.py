@@ -47,7 +47,7 @@ try:
                           group_member_list[j][0] + "&^&" + group_member_list[j][1]
                 group_stats_dict[new_key] = 0
 
-        cur.execute(""""SELECT user_from_id, user_from_name, user_to_id, user_to_name
+        cur.execute(""" SELECT user_from_id, user_from_name, user_to_id, user_to_name
                         FROM Revision_relation
                         WHERE group_id = '""" + group_id[0] + "'")
         group_revision_list = cur.fetchall()
