@@ -7,7 +7,7 @@ from mysql.connector import errorcode
 
 CONFIG = ConfigParser.ConfigParser()
 # config file path
-CONFIG.read("../settings/global.conf")
+CONFIG.read("/home/oper/wikiglass-data-service/wikiglass-service-platform/codes/settings/global.conf")
 # year version
 YEAR = CONFIG.get("system_version", "year")
 # pbworks_db config
