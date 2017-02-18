@@ -91,6 +91,7 @@ try:
                             Total_involved_pages, Total_involved_revisions, Total_words_addition, Total_words_deletion,
                             Total_words_change, High_level_thinking, Low_level_thinking)
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
+                            User_name = if( User_name <> values(User_name), values(User_name), User_name ),
                             Total_involved_pages = if( Total_involved_pages <> values(Total_involved_pages),
                             values(Total_involved_pages), Total_involved_pages ),
                             Total_involved_revisions = if( Total_involved_revisions <> values(Total_involved_revisions),
