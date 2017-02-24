@@ -80,6 +80,13 @@ try:
                                 WHERE page_id = %s AND user_id = %s""", (page[0], user_id))
                 sentence_lvl_list = cur.fetchall()
 
+                print("[tbl_user_page] user_name: " + user_name
+                              + ", user_perm: " + user_perm
+                              + ", page_id: " + page_id
+                              + ", addition: " + str(total_words_addition)
+                              + ", deletion: " + str(total_words_deletion)
+                              + ", changes: " + str(total_words_changes))
+
                 low_lvl_count, high_lvl_count = 0, 0
 
                 for sentence_lvl in sentence_lvl_list:
@@ -88,15 +95,6 @@ try:
                         low_lvl_count += 1
                     if sentence_lvl_level == "level 3":
                         high_lvl_count += 1
-
-                logging.debug("[tbl_user_page] user_name: " + user_name
-                              + ", user_perm: " + user_perm
-                              + ", page_id: " + page_id
-                              + ", addition: " + str(total_words_addition)
-                              + ", deletion: " + str(total_words_deletion)
-                              + ", changes: " + str(total_words_changes)
-                              + ", low_lvl_count: " + str(low_lvl_count)
-                              + ", high_lvl_count: " + str(high_lvl_count))
 
                 cur.execute(""" INSERT INTO User_stats_by_page (User_id, User_name, User_no, User_perm, Page_id,
                                 No_of_involved_revision, Total_words_addition, Total_words_deletion,
