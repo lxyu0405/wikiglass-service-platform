@@ -136,6 +136,7 @@ try:
                                     No_of_involved_revision, Total_words_addition, Total_words_deletion,
                                     Total_words_change, High_level_thinking, Low_level_thinking)
                                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0, 0) ON duplicate key UPDATE
+                                    User_name = if( User_name <> values(User_name), values(User_name), User_name ),
                                     No_of_involved_revision = if( No_of_involved_revision <> values(No_of_involved_revision),
                                     values(No_of_involved_revision), No_of_involved_revision ),
                                     Total_words_addition = if( Total_words_addition <> values(Total_words_addition),
