@@ -182,6 +182,7 @@ try:
                             WHERE Revision_id = %s""", (word_addition, word_deletion, word_changes,
                         revision_model.no_of_words, revision_model.revision_id))
             cnx.commit()
+            REVISION_MODEL_LIST = []
 
     # Close	mysql database connection
     cur.close()

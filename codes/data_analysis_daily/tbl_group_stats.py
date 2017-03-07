@@ -101,6 +101,8 @@ try:
                      high_lvl_count, low_lvl_count))
         cnx.commit()
 
+        GROUP_MODEL_LIST = []
+
     # Close	mysql database connection
     cur.close()
 
