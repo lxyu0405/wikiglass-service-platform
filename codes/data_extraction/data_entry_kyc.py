@@ -44,6 +44,8 @@ try:
     cur.execute("use " + PB_DB_NAME)
 
     cur.execute("SELECT wiki_id, admin_key, wiki_url FROM Wiki WHERE year = '" + YEAR + "' AND school = 'kyc'")
+    # cur.execute("SELECT wiki_id, admin_key, wiki_url FROM Wiki WHERE wiki_id = '2016kyc4sindgp8' ")
+
     wikis = cur.fetchall()
 
     for row in wikis:
