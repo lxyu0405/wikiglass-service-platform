@@ -61,6 +61,7 @@ try:
         while week_start < end_time:
             week_start_string = datetime.datetime.fromtimestamp(week_start).strftime('%Y-%m-%d %H:%M:%S')
             week_end = week_start + 604799
+            week_end_string = datetime.datetime.fromtimestamp(week_end).strftime('%Y-%m-%d %H:%M:%S')
 
             # weekly revision count region
             if True:
@@ -170,9 +171,6 @@ try:
 
             # weekly sentence level region
             if True:
-                week_start_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(week_start))
-                now_time = datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")
-
                 cur.execute(" SELECT User_id, User_name, Group_id FROM User_stats_by_group WHERE User_perm = 'write'")
                 user_info_list = cur.fetchall()
 
@@ -226,7 +224,7 @@ try:
                                     low_thinking_count = if ( low_thinking_count <> values(low_thinking_count),
                                     values(low_thinking_count), low_thinking_count )""",
                                 (sum_group_id, sum_user_name, sum_high_thinking_cnt, sum_low_thinking_cnt,
-                                 week_start_time, now_time))
+                                 week_start_string, week_end_string))
                     cnx.commit()
 
             # Next week
