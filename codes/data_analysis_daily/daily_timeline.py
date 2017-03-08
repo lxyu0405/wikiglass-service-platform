@@ -41,7 +41,7 @@ try:
     # Summarizing data for all schools
     for school in school_list:
         school_name = school[0]
-        start_time = school[1].strftime("%Y-%m-%d %H:%M:%S")
+        start_time = "2016-12-12 17:36:40".strftime("%Y-%m-%d %H:%M:%S")
         day_start = time.mktime(datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").timetuple())
         day_start_string = datetime.datetime.fromtimestamp(day_start).strftime('%Y-%m-%d %H:%M:%S')
         print school_name
