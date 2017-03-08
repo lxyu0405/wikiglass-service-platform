@@ -218,9 +218,13 @@ try:
                     sum_user_name = user_name_dict[sum_user_id]
                     sum_low_thinking_cnt = low_lvl_dict[sum_user_id]
                     sum_high_thinking_cnt = high_lvl_dict[sum_user_id]
-                    cur.execute(""" INSERT IGNORE INTO Weekly_sentence_level_stats (group_id, student_name,
+                    cur.execute(""" INSERT INTO Weekly_sentence_level_stats (group_id, student_name,
                                     high_thinking_count, low_thinking_count, ts_week_start, ts)
-                                    VALUES (%s, %s, %s, %s, %s, %s)""",
+                                    VALUES (%s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
+                                    high_thinking_count = if ( high_thinking_count <> values(high_thinking_count),
+                                    values(high_thinking_count), high_thinking_count ),
+                                    low_thinking_count = if ( low_thinking_count <> values(low_thinking_count),
+                                    values(low_thinking_count), low_thinking_count )""",
                                 (sum_group_id, sum_user_name, sum_high_thinking_cnt, sum_low_thinking_cnt,
                                  week_start_time, now_time))
                     cnx.commit()
