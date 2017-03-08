@@ -170,9 +170,10 @@ try:
             if True:
                 low_lvl_dict, high_lvl_dict, user_group_dict, user_name_dict = {}, {}, {}, {}
 
-                cur.execute(""" SELECT User_id, User_name, Group_id
-                                FROM User_stats_by_group
-                                WHERE User_perm = 'write' AND Group_id LIKE '""" + YEAR + "%'")
+                cur.execute(""" SELECT ug.User_id, ug.User_name, ug.Group_id
+                                FROM User_stats_by_group AS ug, Wiki AS w
+                                WHERE ug.Group_id = w.wiki_id AND ug.User_perm = 'write'
+                                AND w.year = %s AND w.school = %s""", (YEAR, school_name,))
                 user_info_list = cur.fetchall()
 
                 for user_info in user_info_list:
@@ -203,15 +204,9 @@ try:
                     sentence_user_id = sentence[1]
                     sentence_level = sentence[2]
 
-                    if sentence_user_id not in low_lvl_dict.keys():
-                        low_lvl_dict[sentence_user_id] = 0
-                    if sentence_user_id not in high_lvl_dict.keys():
-                        high_lvl_dict[sentence_user_id] = 0
-                    # count low thinking level
-                    if sentence_level == "level 1":
+                    if sentence_user_id in low_lvl_dict.keys() and sentence_level == "level 1":
                         low_lvl_dict[sentence_user_id] += 1
-                    # count high thinking level
-                    if sentence_level == "level 3":
+                    if sentence_user_id in high_lvl_dict.keys() and sentence_level == "level 3":
                         high_lvl_dict[sentence_user_id] += 1
 
                 # summarize data and insert into Daily_sentence_level_stats table
