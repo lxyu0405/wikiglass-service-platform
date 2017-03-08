@@ -227,7 +227,7 @@ try:
                         print("sum_low_thinking_cnt: " + str(sum_low_thinking_cnt))
                         print("sum_high_thinking_cnt: " + str(sum_high_thinking_cnt))
 
-                    cur.execute(""" INSERT IGNORE INTO Daily_sentence_level_stats (group_id, student_name,
+                    cur.execute(""" INSERT INTO Daily_sentence_level_stats (group_id, student_name,
                                     high_thinking_count, low_thinking_count, ts_day_start, ts)
                                     VALUES (%s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
                                     high_thinking_count = if ( high_thinking_count <> values(high_thinking_count),
