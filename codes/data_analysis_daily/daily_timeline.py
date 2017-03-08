@@ -33,8 +33,10 @@ try:
     end_time = time.time()
 
     # Getting a list of all schools
-    cur.execute(" SELECT school, start_time FROM School WHERE year = %s", (YEAR,))
-    school_list = cur.fetchall()
+    # cur.execute(" SELECT school, start_time FROM School WHERE year = %s", (YEAR,))
+    # school_list = cur.fetchall()
+
+    school_list = ['dade']
 
     # Summarizing data for all schools
     for school in school_list:
@@ -220,6 +222,12 @@ try:
                     sum_user_name = user_name_dict[sum_user_id]
                     sum_low_thinking_cnt = low_lvl_dict[sum_user_id]
                     sum_high_thinking_cnt = high_lvl_dict[sum_user_id]
+
+                    if school_name == 'dade':
+                        print("sum_group_id: " + sum_group_id)
+                        print("sum_user_name: " + sum_user_name)
+                        print("sum_low_thinking_cnt: " + str(sum_low_thinking_cnt))
+                        print("sum_high_thinking_cnt: " + str(sum_high_thinking_cnt))
 
                     cur.execute(""" INSERT IGNORE INTO Daily_sentence_level_stats (group_id, student_name,
                                     high_thinking_count, low_thinking_count, ts_day_start, ts)
