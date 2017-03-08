@@ -216,6 +216,7 @@ try:
                     sum_user_name = user_name_dict[sum_user_id]
                     sum_low_thinking_cnt = low_lvl_dict[sum_user_id]
                     sum_high_thinking_cnt = high_lvl_dict[sum_user_id]
+                    print(week_start_string + " ~ " + week_end_string + " > " + str(sum_low_thinking_cnt) + ", " + str(sum_high_thinking_cnt))
                     cur.execute(""" INSERT INTO Weekly_sentence_level_stats (group_id, student_name,
                                     high_thinking_count, low_thinking_count, ts_week_start, ts)
                                     VALUES (%s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
