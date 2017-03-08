@@ -171,7 +171,10 @@ try:
 
             # weekly sentence level region
             if True:
-                cur.execute(" SELECT User_id, User_name, Group_id FROM User_stats_by_group WHERE User_perm = 'write'")
+                cur.execute(""" SELECT ug.User_id, ug.User_name, ug.Group_id
+                                FROM User_stats_by_group AS ug, Wiki AS w
+                                WHERE ug.Group_id = w.wiki_id AND ug.User_perm = 'write'
+                                AND w.year = %s AND w.school = %s""", (YEAR, school_name,))
                 user_info_list = cur.fetchall()
 
                 low_lvl_dict, high_lvl_dict, user_group_dict, user_name_dict = {}, {}, {}, {}
