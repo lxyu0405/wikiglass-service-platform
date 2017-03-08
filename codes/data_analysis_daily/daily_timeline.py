@@ -65,6 +65,7 @@ try:
 
             # Revision count region
             if True:
+                print("[Daily_revision_count region]")
                 # Getting revision count (number of revision counts of each group)
                 cur.execute(""" SELECT w.wiki_id, COUNT(*)
                                 FROM Revision_Stats AS r, Wiki AS w
@@ -82,6 +83,7 @@ try:
                     count = row[1]
                     group_id.append(wiki_id)
                     rev_count.append(count)
+                    print("insert into " + wiki_id + " : " + str(count))
                     cur.execute(""" INSERT INTO Daily_revision_count (group_id, revision_count, ts_day_start)
                                     VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
                                     revision_count = if( revision_count <> values(revision_count),
@@ -89,7 +91,11 @@ try:
                                 (wiki_id, count, day_start_string))
                 cnx.commit()
                 for group in group_list:
+                    print(group)
+                    print(group_list)
+                    print(group_id)
                     if group[0] not in group_id:
+                        print("insert 0 into " + group[0])
                         cur.execute(""" INSERT INTO Daily_revision_count (group_id,revision_count,ts_day_start)
                                         VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
                                         revision_count = if( revision_count <> values(revision_count),
