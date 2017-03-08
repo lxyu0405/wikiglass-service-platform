@@ -83,7 +83,6 @@ try:
                     count = row[1]
                     group_id.append(wiki_id)
                     rev_count.append(count)
-                    print("insert into " + wiki_id + " : " + str(count))
                     cur.execute(""" INSERT INTO Daily_revision_count (group_id, revision_count, ts_day_start)
                                     VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
                                     revision_count = if( revision_count <> values(revision_count),
@@ -91,11 +90,7 @@ try:
                                 (wiki_id, count, day_start_string))
                 cnx.commit()
                 for group in group_list:
-                    print(group)
-                    print(group_list)
-                    print(group_id)
                     if group[0] not in group_id:
-                        print("insert 0 into " + group[0])
                         cur.execute(""" INSERT INTO Daily_revision_count (group_id,revision_count,ts_day_start)
                                         VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
                                         revision_count = if( revision_count <> values(revision_count),
@@ -226,6 +221,8 @@ try:
                     sum_user_name = user_name_dict[sum_user_id]
                     sum_low_thinking_cnt = low_lvl_dict[sum_user_id]
                     sum_high_thinking_cnt = high_lvl_dict[sum_user_id]
+                    user_group_dict.pop(sum_user_id, None)
+                    user_name_dict.pop(sum_user_id, None)
 
                     cur.execute(""" INSERT IGNORE INTO Daily_sentence_level_stats (group_id, student_name,
                                     high_thinking_count, low_thinking_count, ts_day_start, ts)
@@ -236,6 +233,20 @@ try:
                                     values(low_thinking_count), low_thinking_count )""",
                                 (sum_group_id, sum_user_name, sum_high_thinking_cnt, sum_low_thinking_cnt,
                                  day_start_string, day_end_string))
+                    cnx.commit()
+
+                for sum_user_id in user_group_dict.keys():
+                    sum_group_id = user_group_dict[sum_user_id]
+                    sum_user_name = user_name_dict[sum_user_id]
+
+                    cur.execute(""" INSERT IGNORE INTO Daily_sentence_level_stats (group_id, student_name,
+                                    high_thinking_count, low_thinking_count, ts_day_start, ts)
+                                    VALUES (%s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
+                                    high_thinking_count = if ( high_thinking_count <> values(high_thinking_count),
+                                    values(high_thinking_count), high_thinking_count ),
+                                    low_thinking_count = if ( low_thinking_count <> values(low_thinking_count),
+                                    values(low_thinking_count), low_thinking_count )""",
+                                (sum_group_id, sum_user_name, 0, 0, day_start_string, day_end_string))
                     cnx.commit()
 
             # revision_relation_stats region

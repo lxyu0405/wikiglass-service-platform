@@ -218,11 +218,22 @@ try:
                     sum_user_name = user_name_dict[sum_user_id]
                     sum_low_thinking_cnt = low_lvl_dict[sum_user_id]
                     sum_high_thinking_cnt = high_lvl_dict[sum_user_id]
+                    user_group_dict.pop(sum_user_id, None)
+                    user_name_dict.pop(sum_user_id, None)
                     cur.execute(""" INSERT IGNORE INTO Weekly_sentence_level_stats (group_id, student_name,
                                     high_thinking_count, low_thinking_count, ts_week_start, ts)
                                     VALUES (%s, %s, %s, %s, %s, %s)""",
                                 (sum_group_id, sum_user_name, sum_high_thinking_cnt, sum_low_thinking_cnt,
                                  week_start_time, now_time))
+                    cnx.commit()
+
+                for sum_user_id in user_group_dict.keys():
+                    sum_group_id = user_group_dict[sum_user_id]
+                    sum_user_name = user_name_dict[sum_user_id]
+                    cur.execute(""" INSERT IGNORE INTO Weekly_sentence_level_stats (group_id, student_name,
+                                    high_thinking_count, low_thinking_count, ts_week_start, ts)
+                                    VALUES (%s, %s, %s, %s, %s, %s)""",
+                                (sum_group_id, sum_user_name, 0, 0, week_start_time, now_time))
                     cnx.commit()
 
             # Next week
