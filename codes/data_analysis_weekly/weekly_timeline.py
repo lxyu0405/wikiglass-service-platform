@@ -202,15 +202,11 @@ try:
                     sentence_info_user_id = sentence_info[1]
                     sentence_info_level = sentence_info[2]
 
-                    if sentence_info_user_id not in low_lvl_dict.keys():
-                        low_lvl_dict[sentence_info_user_id] = 0
-                    if sentence_info_user_id not in high_lvl_dict.keys():
-                        high_lvl_dict[sentence_info_user_id] = 0
                     # count low thinking level
-                    if sentence_info_level == "level 1":
+                    if sentence_info_user_id in low_lvl_dict.keys() and sentence_info_level == "level 1":
                         low_lvl_dict[sentence_info_user_id] += 1
                     # count high thinking level
-                    if sentence_info_level == "level 3":
+                    if sentence_info_user_id in high_lvl_dict.keys() and sentence_info_level == "level 3":
                         high_lvl_dict[sentence_info_user_id] += 1
 
                 # summarize data and insert into Daily_sentence_level_stats table
