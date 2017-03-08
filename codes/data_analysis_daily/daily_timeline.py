@@ -172,7 +172,7 @@ try:
 
                 cur.execute(""" SELECT User_id, User_name, Group_id
                                 FROM User_stats_by_group
-                                WHERE User_perm = 'write' AND Group_id LIKE '""" + YEAR + school_name + "%'")
+                                WHERE User_perm = 'write' AND Group_id LIKE '""" + YEAR + "%'")
                 user_info_list = cur.fetchall()
 
                 for user_info in user_info_list:
