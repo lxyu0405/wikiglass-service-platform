@@ -59,7 +59,7 @@ try:
 
         # Summarizing data in daily basis
         while day_start < end_time:
-            print datetime.datetime.fromtimestamp(day_start).strftime('%Y-%m-%d %H:%M:%S')
+            day_start_string = datetime.datetime.fromtimestamp(day_start).strftime('%Y-%m-%d %H:%M:%S')
             day_end = day_start + 86399
             day_end_string = datetime.datetime.fromtimestamp(day_end).strftime('%Y-%m-%d %H:%M:%S')
 
