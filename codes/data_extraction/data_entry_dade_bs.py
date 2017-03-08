@@ -37,7 +37,9 @@ try:
     cur_bs = cnx_bs.cursor(buffered=True)
     cur_bs.execute("use " + BS_DB_NAME)
 
-    bs_wiki_prefix = ['chn1', 'chn2', 'chn3', 'chn4', 'chn5', 'chn6']
+    school_name = 'dade'
+    class_name = 'chn'
+    bs_wiki_prefix = ['chn1a', 'chn2a', 'chn3a', 'chn4a', 'chn5a', 'chn6a']
 
     for prefix in bs_wiki_prefix:
         user_table = prefix + '_user'
@@ -46,7 +48,7 @@ try:
         revision_table = prefix + '_revision'
         revision_text_table = prefix + '_text'
 
-        wiki_id = '2016bsclass' + prefix[:3] + 'gp' + prefix[3:]
+        wiki_id = '2016' + school_name + class_name + '_' + prefix[4] + 'gp' + prefix[3]
 
         # [Page BlueSpice] select page information from bluespice
         cur_bs.execute("SELECT page_id, page_title FROM " + page_table)

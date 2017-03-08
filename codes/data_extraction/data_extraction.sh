@@ -20,7 +20,7 @@ echo " "
 
 #Data Extraction from BlueSpice
 echo "$now Start data_entry_bs.py"
-/usr/local/bin/python ${extractPyDir}data_entry_bs.py
+/usr/local/bin/python ${extractPyDir}data_entry_dade_bs.py
 now3=$(date +"%T")
 echo "$now1 Complete data_entry_bs.py"
 
