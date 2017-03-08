@@ -59,7 +59,7 @@ try:
 
         # Summarizing data in weekly basis
         while week_start < end_time:
-            print datetime.datetime.fromtimestamp(week_start).strftime('%Y-%m-%d %H:%M:%S')
+            week_start_string = datetime.datetime.fromtimestamp(week_start).strftime('%Y-%m-%d %H:%M:%S')
             week_end = week_start + 604799
 
             # weekly revision count region
