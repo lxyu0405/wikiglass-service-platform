@@ -38,10 +38,25 @@ try:
     cur_bs.execute("use " + BS_DB_NAME)
 
     school_name = 'dade'
-    class_name = 'chn'
-    bs_wiki_prefix = ['chn1a', 'chn2a', 'chn3a', 'chn4a', 'chn5a', 'chn6a']
 
-    for prefix in bs_wiki_prefix:
+    prefix_class_dic = {
+        'chn1a': 'chn',
+        'chn2a': 'chn',
+        'chn3a': 'chn',
+        'chn4a': 'chn',
+        'chn5a': 'chn',
+        'chn6a': 'chn',
+        'math1a': 'math',
+        'math2a': 'math',
+        'math3a': 'math',
+        'math4a': 'math',
+        'math5a': 'math',
+        'math6a': 'math',
+    }
+
+    for prefix in prefix_class_dic.keys():
+        class_name = prefix_class_dic[prefix]
+
         user_table = prefix + '_user'
         user_group_table = prefix + '_user_groups'
         page_table = prefix + '_page'
