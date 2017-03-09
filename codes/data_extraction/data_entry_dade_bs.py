@@ -63,7 +63,8 @@ try:
         revision_table = prefix + '_revision'
         revision_text_table = prefix + '_text'
 
-        wiki_id = '2016' + school_name + class_name + '_' + prefix[4] + 'gp' + prefix[3]
+        wiki_id = '2016' + school_name + class_name + '_' + prefix[-1] + 'gp' + prefix[-2]
+        print(wiki_id)
 
         # [Page BlueSpice] select page information from bluespice
         cur_bs.execute("SELECT page_id, page_title FROM " + page_table)
