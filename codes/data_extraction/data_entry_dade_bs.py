@@ -40,18 +40,18 @@ try:
     school_name = 'dade'
 
     prefix_class_dic = {
-        'chn1a': 'chn',
-        'chn2a': 'chn',
-        'chn3a': 'chn',
-        'chn4a': 'chn',
-        'chn5a': 'chn',
-        'chn6a': 'chn',
-        'math1a': 'math',
-        'math2a': 'math',
-        'math3a': 'math',
-        'math4a': 'math',
-        'math5a': 'math',
-        'math6a': 'math',
+        'chn1b': 'chn',
+        'chn2b': 'chn',
+        'chn3b': 'chn',
+        'chn4b': 'chn',
+        'chn5b': 'chn',
+        'chn6b': 'chn',
+        'math1b': 'math',
+        'math2b': 'math',
+        'math3b': 'math',
+        'math4b': 'math',
+        'math5b': 'math',
+        'math6b': 'math',
     }
 
     for prefix in prefix_class_dic.keys():
