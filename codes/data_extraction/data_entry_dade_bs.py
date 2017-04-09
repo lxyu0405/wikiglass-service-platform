@@ -86,7 +86,8 @@ try:
         for page_info in page_info_list:
             page_id = wiki_id + '_' + str(page_info[0])
             page_name = page_info[1]
-
+            if 'Sidebar' in page_name:
+                continue
             logging.debug('[dataEntry_bs_chn] page_id: ' + page_id + ' page_name: ' + page_name)
             cur_pbworks.execute(""" INSERT INTO Page (page_id, wiki_id, page_name, page_url)
                                     VALUES (%s, %s, %s, %s)
