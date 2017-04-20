@@ -55,6 +55,7 @@ try:
         WIKI_MODEL_LIST.append(wiki_model)
 
     for wiki_model in WIKI_MODEL_LIST:
+        print(wiki_model.wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_model.admin_key + "/object_types/page")
         logging.debug(wiki_model.wiki_url + "/api_v2/op/GetObjectsNOM/admin_key/" + wiki_model.admin_key + "/object_types/page")
         # prepare data for page list
         ToolBox.get_page_list(wiki_model.wiki_id, wiki_model.wiki_url, wiki_model.admin_key, PAGE_MODEL_LIST)
