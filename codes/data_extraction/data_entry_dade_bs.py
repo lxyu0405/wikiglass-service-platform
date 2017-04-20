@@ -78,6 +78,8 @@ try:
         wiki_id = '2016' + school_name + class_name + '_' + prefix[-1] + 'gp' + prefix[-2]
         print(wiki_id)
 
+        useless_pages_id = []
+
         # [Page BlueSpice] select page information from bluespice
         cur_bs.execute("SELECT page_id, page_title FROM " + page_table)
         page_info_list = cur_bs.fetchall()
@@ -87,6 +89,7 @@ try:
             page_id = wiki_id + '_' + str(page_info[0])
             page_name = page_info[1]
             if 'Sidebar' in page_name:
+                useless_pages_id.append(page_info[0])
                 continue
             logging.debug('[dataEntry_bs_chn] page_id: ' + page_id + ' page_name: ' + page_name)
             cur_pbworks.execute(""" INSERT INTO Page (page_id, wiki_id, page_name, page_url)
@@ -144,6 +147,9 @@ try:
             rev_content_raw = rev_info[4]
             rev_content = rev_info[4].decode("utf-8").encode('unicode_escape')
             rev_len = rev_info[5]
+
+            if rev_info[1] in useless_pages_id:
+                continue
 
             if rev_page_id in rev_page_dict.keys():
                 rev_page_dict[rev_page_id] += 1
