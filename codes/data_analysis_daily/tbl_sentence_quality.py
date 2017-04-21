@@ -74,7 +74,12 @@ try:
         revision_model.user_id = revision_user[1]
         revision_model.revision_id = revision_user[3]
         revision_model.version = revision_user[4]
-        revision_model.content = revision_user[5].decode('unicode_escape')
+        try:
+            revision_model.content = revision_user[5].decode('unicode_escape')
+        except:
+            print('exception')
+            continue
+
         revision_model.timestamp = revision_user[6]
 
         user_model = UserModel()
