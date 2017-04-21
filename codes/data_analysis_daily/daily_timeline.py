@@ -82,19 +82,25 @@ try:
                     count = row[1]
                     group_id.append(wiki_id)
                     rev_count.append(count)
-                    cur.execute(""" INSERT INTO Daily_revision_count (group_id, revision_count, ts_day_start)
-                                    VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
-                                    revision_count = if( revision_count <> values(revision_count),
-                                    values(revision_count), revision_count )""",
-                                (wiki_id, count, day_start_string))
-                cnx.commit()
-                for group in group_list:
-                    if group[0] not in group_id:
-                        cur.execute(""" INSERT INTO Daily_revision_count (group_id,revision_count,ts_day_start)
+                    try:
+                        cur.execute(""" INSERT INTO Daily_revision_count (group_id, revision_count, ts_day_start)
                                         VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
                                         revision_count = if( revision_count <> values(revision_count),
                                         values(revision_count), revision_count )""",
-                                    (group[0], 0, day_start_string))
+                                    (wiki_id, count, day_start_string))
+                    except mysql.connector.Error as err:
+                        print("Exception revision count")
+                cnx.commit()
+                for group in group_list:
+                    if group[0] not in group_id:
+                        try:
+                            cur.execute(""" INSERT INTO Daily_revision_count (group_id,revision_count,ts_day_start)
+                                            VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
+                                            revision_count = if( revision_count <> values(revision_count),
+                                            values(revision_count), revision_count )""",
+                                        (group[0], 0, day_start_string))
+                        except mysql.connector.Error as err:
+                            print("Exception revision count")
                 cnx.commit()
 
             # Word count region
@@ -115,17 +121,23 @@ try:
                     count = row[1]
                     group_id.append(wiki_id)
                     word_count.append(count)
-                    cur.execute(""" INSERT INTO Daily_word_count (group_id,word_count,ts_day_start)
-                                    VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
-                                    word_count = if( word_count <> values(word_count), values(word_count), word_count )""",
-                                (wiki_id, count, day_start_string))
-                cnx.commit()
-                for group in group_list:
-                    if group[0] not in group_id:
+                    try:
                         cur.execute(""" INSERT INTO Daily_word_count (group_id,word_count,ts_day_start)
                                         VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
                                         word_count = if( word_count <> values(word_count), values(word_count), word_count )""",
-                                    (group[0], 0, day_start_string))
+                                    (wiki_id, count, day_start_string))
+                    except mysql.connector.Error as err:
+                            print("Exception")
+                cnx.commit()
+                for group in group_list:
+                    if group[0] not in group_id:
+                        try:
+                            cur.execute(""" INSERT INTO Daily_word_count (group_id,word_count,ts_day_start)
+                                            VALUES (%s,%s,%s) ON DUPLICATE KEY UPDATE
+                                            word_count = if( word_count <> values(word_count), values(word_count), word_count )""",
+                                        (group[0], 0, day_start_string))
+                        except mysql.connector.Error as err:
+                            print("Exception")
                 cnx.commit()
 
             # Word amendment region
@@ -151,19 +163,25 @@ try:
                     group_id.append(wiki_id)
                     student_name.append(student)
                     word_amendment_count.append(count)
-                    cur.execute(""" INSERT INTO Daily_word_amendment (group_id,student_name,word_amendment_count,ts_day_start)
-                                    VALUES (%s,%s,%s,%s) ON DUPLICATE KEY UPDATE
-                                    word_amendment_count = if( word_amendment_count <> values(word_amendment_count),
-                                    values(word_amendment_count), word_amendment_count )""",
-                                    (wiki_id, student, count, day_start_string))
-                cnx.commit()
-                for student in student_list:
-                    if student[0] not in student_name:
+                    try:
                         cur.execute(""" INSERT INTO Daily_word_amendment (group_id,student_name,word_amendment_count,ts_day_start)
                                         VALUES (%s,%s,%s,%s) ON DUPLICATE KEY UPDATE
                                         word_amendment_count = if( word_amendment_count <> values(word_amendment_count),
                                         values(word_amendment_count), word_amendment_count )""",
-                                        (student[1], student[0], 0, day_start_string))
+                                        (wiki_id, student, count, day_start_string))
+                    except mysql.connector.Error as err:
+                            print("Exception")
+                cnx.commit()
+                for student in student_list:
+                    if student[0] not in student_name:
+                        try:
+                            cur.execute(""" INSERT INTO Daily_word_amendment (group_id,student_name,word_amendment_count,ts_day_start)
+                                            VALUES (%s,%s,%s,%s) ON DUPLICATE KEY UPDATE
+                                            word_amendment_count = if( word_amendment_count <> values(word_amendment_count),
+                                            values(word_amendment_count), word_amendment_count )""",
+                                            (student[1], student[0], 0, day_start_string))
+                        except mysql.connector.Error as err:
+                            print("Exception")
                 cnx.commit()
 
             # Sentence level count region
@@ -215,16 +233,18 @@ try:
                     sum_user_name = user_name_dict[sum_user_id]
                     sum_low_thinking_cnt = low_lvl_dict[sum_user_id]
                     sum_high_thinking_cnt = high_lvl_dict[sum_user_id]
-
-                    cur.execute(""" INSERT INTO Daily_sentence_level_stats (group_id, student_name,
-                                    high_thinking_count, low_thinking_count, ts_day_start, ts)
-                                    VALUES (%s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
-                                    high_thinking_count = if ( high_thinking_count <> values(high_thinking_count),
-                                    values(high_thinking_count), high_thinking_count ),
-                                    low_thinking_count = if ( low_thinking_count <> values(low_thinking_count),
-                                    values(low_thinking_count), low_thinking_count )""",
-                                (sum_group_id, sum_user_name, sum_high_thinking_cnt, sum_low_thinking_cnt,
-                                 day_start_string, day_end_string))
+                    try:
+                        cur.execute(""" INSERT INTO Daily_sentence_level_stats (group_id, student_name,
+                                        high_thinking_count, low_thinking_count, ts_day_start, ts)
+                                        VALUES (%s, %s, %s, %s, %s, %s) ON duplicate key UPDATE
+                                        high_thinking_count = if ( high_thinking_count <> values(high_thinking_count),
+                                        values(high_thinking_count), high_thinking_count ),
+                                        low_thinking_count = if ( low_thinking_count <> values(low_thinking_count),
+                                        values(low_thinking_count), low_thinking_count )""",
+                                    (sum_group_id, sum_user_name, sum_high_thinking_cnt, sum_low_thinking_cnt,
+                                     day_start_string, day_end_string))
+                    except mysql.connector.Error as err:
+                        print("Exception")
                     cnx.commit()
 
             # revision_relation_stats region
@@ -281,12 +301,14 @@ try:
                         logging.debug("Insert Revision_relation_stats_daily "
                                       + user_from_id + " (" + user_from_name + ") -> "
                                       + user_to_id + " (" + user_to_name + ") [" + str(group_stats_dict[key]) + "]")
-
-                        cur.execute(""" INSERT INTO Revision_relation_stats_daily (user_from_id, user_from_name,
-                                        user_to_id, user_to_name, group_id, total_revision_count, time_stamp)
-                                        VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-                                    (user_from_id, user_from_name, user_to_id, user_to_name, group_id[0],
-                                     group_stats_dict[key], day_start_string))
+                        try:
+                            cur.execute(""" INSERT INTO Revision_relation_stats_daily (user_from_id, user_from_name,
+                                            user_to_id, user_to_name, group_id, total_revision_count, time_stamp)
+                                            VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                                        (user_from_id, user_from_name, user_to_id, user_to_name, group_id[0],
+                                         group_stats_dict[key], day_start_string))
+                        except mysql.connector.Error as err:
+                            print("Exception")
                         cnx.commit()
 
             # Next day
