@@ -111,7 +111,7 @@ try:
             user_group = user_info[2]
             user_perm = 'admin' if ( user_group == 'sysop' or user_group == 'bureaucrat' or user_group == 'teacher') else 'write'
 
-            logging.debug('[dataEntry_bs_chn] user_id: ' + user_id + ' user_name: ' + user_name + ' user_group: ' + user_group + ' user_perm: ' + user_perm)
+            print('[dataEntry_bs_chn] user_id: ' + user_id + ' user_name: ' + user_name + ' user_group: ' + user_group + ' user_perm: ' + user_perm)
 
             cur_pbworks.execute("""	INSERT INTO User (user_id, full_name, username, perm)
                                     VALUES (%s, %s, %s, %s)
@@ -157,8 +157,7 @@ try:
                 rev_page_dict[rev_page_id] = 1
             rev_version = rev_page_dict[rev_page_id]
 
-            print('[dataEntry_bs_chn] rev_page_id: ' + rev_page_id + ' rev_timestamp: ' + rev_timestamp + ' rev_user: ' + rev_user + ' rev_len: ' + str(rev_len))
-            print('[dataEntry_bs_chn] rev_version: ' + str(rev_version) + ' rev_content: ' + rev_content_raw)
+            print('[dataEntry_bs_chn] rev_page_id: ' + str(rev_page_id) + ' rev_timestamp: ' + str(rev_timestamp) + 'rev_user: ' + str(rev_user) + ' rev_len: ' + str(rev_len))
 
             cur_pbworks.execute("""	INSERT INTO Revision (page_id, timestamp, version, oid, user_id, content)
                                     SELECT * FROM (
