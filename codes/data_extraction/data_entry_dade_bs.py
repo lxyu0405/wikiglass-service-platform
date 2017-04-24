@@ -157,7 +157,7 @@ try:
                 rev_page_dict[rev_page_id] = 1
             rev_version = rev_page_dict[rev_page_id]
 
-            print('[dataEntry_bs_chn] rev_page_id: ' + str(rev_page_id) + ' rev_timestamp: ' + str(rev_timestamp) + 'rev_user: ' + str(rev_user) + ' rev_len: ' + str(rev_len))
+            print('[dataEntry_bs] rev_page_id: ' + str(rev_page_id) + ' rev_timestamp: ' + str(rev_timestamp) + 'rev_user: ' + str(rev_user) + ' rev_len: ' + str(rev_len))
 
             cur_pbworks.execute("""	INSERT INTO Revision (page_id, timestamp, version, oid, user_id, content)
                                     SELECT * FROM (

@@ -39,7 +39,11 @@ try:
         page_index = page[2]
 
         # Get revision count of that page
-        cur.execute("SELECT count(*) FROM Revision WHERE page_id = '" + page_id + "'")
+        cur.execute(""" SELECT count(*)
+                        FROM Revision, User
+                        WHERE page_id = '""" + page_id + """'
+                        AND User.user_id = Revision.user_id
+                        AND User.perm = 'write'""")
         revision_count = cur.fetchone()
         total_revisions = int(revision_count[0])
         total_words = 0
