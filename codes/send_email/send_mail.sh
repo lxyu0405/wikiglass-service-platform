@@ -9,13 +9,13 @@ now1=$(date +"%T")
 echo "$now1 Complete weekly_email.py"
 echo " "
 
-echo "$now Start weekly_email-dade.py"
+echo "$now1 Start weekly_email-dade.py"
 /usr/local/bin/python ${sendMailDir}send_mail-dade.py
 now2=$(date +"%T")
 echo "$now2 Complete weekly_email-dade.py"
 echo " "
 
-echo "$now1 Start sendEmail"
+echo "$now2 Start sendEmail"
 for txt in /home/oper/wikiglass-data-service/resources/email-txt/*
 do
 	if [ -f "$txt" ];then
