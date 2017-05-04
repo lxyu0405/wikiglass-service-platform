@@ -55,8 +55,7 @@ try:
     # Get a teacher list
     cur.execute("""	SELECT DISTINCT(name), full_name
                     FROM Class_user,loginUser
-                    WHERE Class_user.class_id LIKE '""" + YEAR + """%'
-                    AND Class_user.class_id NOT LIKE '""" + YEAR + """dade%'
+                    WHERE Class_user.class_id LIKE '""" + YEAR + """dade%'
                     AND Class_user.name = loginUser.user
                     AND Class_user.role = 'teacher'""")
     teacher_list = cur.fetchall()
@@ -153,11 +152,11 @@ try:
 
             # Output for this part
             if is_null:
-                stat="Not a single group made any revisions this week. Please consider encouraging students to contribute more actively.</p>"
+                stat=u"本周没有小组提交修改记录，请鼓励学生更积极地参与课程活动中。</p>"
             else:
                 avg = mean(group_rev_count)
                 sd = stdev(group_rev_count)
-                stat = "In this class, the average number of revisions per group is " + str(avg) + ". Following is a brief analysis of weekly performance of the class.</p>"
+                stat = u"本周，平均每小组提交次数为 " + str(avg) + u", 下面是对本周学生表现的简要分析。</p>"
                 print(str(sum(group_rev_count)) + " " + str(avg) + " " + str(sd))
 
 
@@ -201,16 +200,16 @@ try:
                 best_group_rev_count.append(row[1])
                 count += 1
             if count==3:
-                best_group_comp = "<u><b>Group comparsion</u><br>Top 3 groups with the best performance:<p style=\"padding-left:3em;margin:2px;\">1. Group "+str(best_group_no[0]) \
-                            +" ("+str(best_group_rev_count[0])+" revisions)<br>2. Group "+str(best_group_no[1])+" ("+str(best_group_rev_count[1]) \
-                            +" revisions)<br>3. Group "+str(best_group_no[2])+" ("+str(best_group_rev_count[2])+" revisions)</p>"
+                best_group_comp = u"<u><b>小组表现：</u><br>表现最好的三个小组：<p style=\"padding-left:3em;margin:2px;\">1. 组 "+str(best_group_no[0]) \
+                            +" ("+str(best_group_rev_count[0])+u" 次提交记录)<br>2. 组 "+str(best_group_no[1])+" ("+str(best_group_rev_count[1]) \
+                            +u" 次提交记录)<br>3. 组 "+str(best_group_no[2])+" ("+str(best_group_rev_count[2])+u" 次提交记录)</p>"
             elif count==2:
-                best_group_comp = "<u><b>Group comparsion</u><br>Top 2 groups with the best performance:<p style=\"padding-left:3em;margin:2px;\">1. Group "+str(best_group_no[0]) \
-                            +" ("+str(best_group_rev_count[0])+" revisions)<br>2. Group "+str(best_group_no[1])+" ("+str(best_group_rev_count[1]) \
-                            +" revisions)</p>"
+                best_group_comp = u"<u><b>小组表现：</u><br>表现最好的两个小组：<p style=\"padding-left:3em;margin:2px;\">1. 组 "+str(best_group_no[0]) \
+                            +" ("+str(best_group_rev_count[0])+u" 次提交记录)<br>2. 组 "+str(best_group_no[1])+" ("+str(best_group_rev_count[1]) \
+                            +u" 次提交记录)</p>"
             elif count==1:
-                best_group_comp = "<u><b>Group comparsion</u><br>The only group made revision:<p style=\"padding-left:3em;margin:2px;\">1. Group "+str(best_group_no[0]) \
-                            +" ("+str(best_group_rev_count[0])+" revisions)</p>"
+                best_group_comp = u"<u><b>小组表现：</u><br>表现最好的小组：<p style=\"padding-left:3em;margin:2px;\">1. 组 "+str(best_group_no[0]) \
+                            +" ("+str(best_group_rev_count[0])+u" 次提交记录)</p>"
             else:
                 best_group_comp = ""
 
@@ -225,25 +224,25 @@ try:
                 if (group[0] not in worst_group_no):
                     zero.append(group[0])
             if count==0:
-                worst_group_comp = "Top 3 groups with the worst performance:<p style=\"padding-left:3em;margin:2px;\">1. Group "+str(worst_group_no[0]) \
-					+" ("+str(worst_group_rev_count[0])+" revisions)<br>2. Group "+str(worst_group_no[1])+" ("+str(worst_group_rev_count[1]) \
-					+" revisions)<br>3. Group "+str(worst_group_no[2])+" ("+str(worst_group_rev_count[2])+" revisions)</p><br>"
+                worst_group_comp = u"表现不好的三个小组：<p style=\"padding-left:3em;margin:2px;\">1. 组 "+str(worst_group_no[0]) \
+					+" ("+str(worst_group_rev_count[0])+u" 次提交记录)<br>2. 组 "+str(worst_group_no[1])+" ("+str(worst_group_rev_count[1]) \
+					+u" 次提交记录)<br>3. 组 "+str(worst_group_no[2])+" ("+str(worst_group_rev_count[2])+u" 次提交记录)</p><br>"
             elif count==1:
-                worst_group_comp = "Top 3 groups with the worst performance:<p style=\"padding-left:3em;margin:2px;\">1. Group "+str(zero[0]) \
-					+" (0 revisions)<br>2. Group "+str(worst_group_no[0])+" ("+str(worst_group_rev_count[0]) \
-					+" revisions)<br>3. Group "+str(worst_group_no[1])+" ("+str(worst_group_rev_count[1])+" revisions)</p><br>"
+                worst_group_comp = u"表现不好的三个小组：<p style=\"padding-left:3em;margin:2px;\">1. 组 "+str(zero[0]) \
+					+u" (0 次提交记录)<br>2. 组 "+str(worst_group_no[0])+" ("+str(worst_group_rev_count[0]) \
+					+u" 次提交记录)<br>3. 组 "+str(worst_group_no[1])+" ("+str(worst_group_rev_count[1])+u" 次提交记录)</p><br>"
             elif count==2:
-                worst_group_comp = "Top 3 groups with the worst performance:<p style=\"padding-left:3em;margin:2px;\">1. Group "+str(zero[0]) \
-					+" (0 revisions)<br>2. Group "+str(zero[1])+" (0 revisions)<br>3. Group " \
-					+str(worst_group_no[0])+" ("+str(worst_group_rev_count[0])+" revisions)</p><br>"
+                worst_group_comp = u"表现不好的三个小组：<p style=\"padding-left:3em;margin:2px;\">1. 组 "+str(zero[0]) \
+					+u" (0 次提交记录)<br>2. 组 "+str(zero[1])+u" (0 次提交记录)<br>3. 组 " \
+					+str(worst_group_no[0])+" ("+str(worst_group_rev_count[0])+u" 次提交记录)</p><br>"
             elif count==no_of_groups:
                 worst_group_comp = ""
             else:
-                worst_group_comp = "Groups without making any revisions:<p style=\"padding-left:3em;margin:2px;\">"
+                worst_group_comp = u"没有提交记录的小组:<p style=\"padding-left:3em;margin:2px;\">"
                 for i in range(1,count-1):
-                    worst_group_comp = worst_group_comp+str(i)+". Group "+str(zero[i-1])+"<br>"
-                worst_group_comp = worst_group_comp+str(count-1)+". Group "+str(zero[count-2])+"<br>"
-                worst_group_comp = worst_group_comp+str(count)+". Group "+str(zero[count-1])+"</p><br>"
+                    worst_group_comp = worst_group_comp+str(i)+u". 组 "+str(zero[i-1])+"<br>"
+                worst_group_comp = worst_group_comp+str(count-1)+u". 组 "+str(zero[count-2])+"<br>"
+                worst_group_comp = worst_group_comp+str(count)+u". 组 "+str(zero[count-1])+"</p><br>"
 
 
             # This part is to get the Best 5 and Worst 5 students in a class by comparing their word changes
@@ -298,14 +297,14 @@ try:
                 count = count + 1
 
             if count>=2:
-                best_indiv_comp = u"\n<u><b>Individual performance</u><br>Top "+str(count)+" students in contribution:<p style=\"padding-left:3em;margin:2px;\">"
+                best_indiv_comp = u"\n<u><b>个人表现:</u><br>表现积极的学生:<p style=\"padding-left:3em;margin:2px;\">"
                 for i in range(1,count-1):
-                    best_indiv_comp = best_indiv_comp+str(i)+". "+str(best_stu_name[i-1]).title()+" ("+str(best_stu_add[i-1])+" words added, "+str(best_stu_del[i-1])+" words deleted)<br>"
-                best_indiv_comp = best_indiv_comp+str(count-1)+". "+str(best_stu_name[count-2]).title()+" ("+str(best_stu_add[count-2])+" words added, "+str(best_stu_del[count-2])+" words deleted)<br>"
-                best_indiv_comp = best_indiv_comp+str(count)+". "+str(best_stu_name[count-1]).title()+" ("+str(best_stu_add[count-1])+" words added, "+str(best_stu_del[count-1])+" words deleted)<br></p>"
+                    best_indiv_comp = best_indiv_comp+str(i)+". "+str(best_stu_name[i-1]).title()+" ("+str(best_stu_add[i-1])+u" 字数添加, "+str(best_stu_del[i-1])+u" 字数删除)<br>"
+                best_indiv_comp = best_indiv_comp+str(count-1)+". "+str(best_stu_name[count-2]).title()+" ("+str(best_stu_add[count-2])+u" 字数添加, "+str(best_stu_del[count-2])+u" 字数删除)<br>"
+                best_indiv_comp = best_indiv_comp+str(count)+". "+str(best_stu_name[count-1]).title()+" ("+str(best_stu_add[count-1])+u" 字数添加, "+str(best_stu_del[count-1])+u" 字数删除)<br></p>"
             elif count==1:
-                best_indiv_comp = "\n<u><b>Individual performance</u><br>The top student in contribution is<p style=\"padding-left:3em;margin:2px;\">"
-                best_indiv_comp = best_indiv_comp+"1. "+str(best_stu_name[0]).title()+" ("+str(best_stu_add[0])+" words added, "+str(best_stu_del[0])+" words deleted).<br></p>"
+                best_indiv_comp = u"\n<u><b>个人表现:</u><br>表现积极的学生<p style=\"padding-left:3em;margin:2px;\">"
+                best_indiv_comp = best_indiv_comp+"1. "+str(best_stu_name[0]).title()+" ("+str(best_stu_add[0])+u" 字数添加, "+str(best_stu_del[0])+u" 字数删除).<br></p>"
             else:
                 best_indiv_comp = u""
 
@@ -326,37 +325,37 @@ try:
                     total_d = 0
                     zero.append(user_name)
             if count==0:
-                worst_indiv_comp = u"\nTop 5 inactive students:<p style=\"padding-left:3em;margin:2px;\">1. "+str(worst_stu_name[0]).title() \
-                    +" ("+str(worst_stu_add[0])+" words added, "+str(worst_stu_del[0])+" words deleted)<br>2. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1]) \
-                    +" words added, "+str(worst_stu_del[1])+" words deleted)<br>3. "+str(worst_stu_name[2]).title()+" ("+str(worst_stu_add[2])+" words added, " \
-                    +str(worst_stu_del[2])+" words deleted)<br>4. "+str(worst_stu_name[3]).title()+" ("+str(worst_stu_add[3])+" words added, "+str(worst_stu_del[3]) \
-                    +" words deleted)<br>5. "+str(worst_stu_name[4]).title()+" ("+str(worst_stu_add[4])+" words added, "+str(worst_stu_del[4])+" words deleted)</p><br>"
+                worst_indiv_comp = u"\n表现不太积极的学生:<p style=\"padding-left:3em;margin:2px;\">1. "+str(worst_stu_name[0]).title() \
+                    +" ("+str(worst_stu_add[0])+u" 字数添加, "+str(worst_stu_del[0])+u" 字数删除)<br>2. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1]) \
+                    +u" 字数添加, "+str(worst_stu_del[1])+u" 字数删除)<br>3. "+str(worst_stu_name[2]).title()+" ("+str(worst_stu_add[2])+u" 字数添加, " \
+                    +str(worst_stu_del[2])+u" 字数删除)<br>4. "+str(worst_stu_name[3]).title()+" ("+str(worst_stu_add[3])+u" 字数添加, "+str(worst_stu_del[3]) \
+                    +u" 字数删除)<br>5. "+str(worst_stu_name[4]).title()+" ("+str(worst_stu_add[4])+u" 字数添加, "+str(worst_stu_del[4])+u" 字数删除)</p><br>"
             elif count==1:
-                worst_indiv_comp = u"\nTop 5 inactive students:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title() \
-                    +" (0 words added, 0 words deleted)<br>2. "+str(worst_stu_name[0]).title()+" ("+str(worst_stu_add[0]) \
-                    +" words added, "+str(worst_stu_del[0])+" words deleted)<br>3. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1])+" words added, " \
-                    +str(worst_stu_del[1])+" words deleted)<br>4. "+str(worst_stu_name[2]).title()+" ("+str(worst_stu_add[2])+" words added, "+str(worst_stu_del[2]) \
-                    +" words deleted)<br>5. "+str(worst_stu_name[3]).title()+" ("+str(worst_stu_add[3])+" words added, "+str(worst_stu_del[3])+" words deleted)</p><br>"
+                worst_indiv_comp = u"\n表现不太积极的学生:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title() \
+                    +u" (0 字数添加, 0 字数删除)<br>2. "+str(worst_stu_name[0]).title()+" ("+str(worst_stu_add[0]) \
+                    +u" 字数添加, "+str(worst_stu_del[0])+u" 字数删除)<br>3. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1])+u" 字数添加, " \
+                    +str(worst_stu_del[1])+u" 字数删除)<br>4. "+str(worst_stu_name[2]).title()+" ("+str(worst_stu_add[2])+u" 字数添加, "+str(worst_stu_del[2]) \
+                    +u" 字数删除)<br>5. "+str(worst_stu_name[3]).title()+" ("+str(worst_stu_add[3])+u" 字数添加, "+str(worst_stu_del[3])+u" 字数删除)</p><br>"
             elif count==2:
-                worst_indiv_comp = u"\nTop 5 inactive students:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title() \
-                    +" (0 words added, 0 words deleted)<br>2. "+str(zero[1]).title()+" (0 words added, 0 words deleted)<br>3. "+str(worst_stu_name[0]).title() \
-                    +" ("+str(worst_stu_add[0])+" words added, "+str(worst_stu_del[0])+" words deleted)<br>4. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1]) \
-                    +" words added, "+str(worst_stu_del[1])+" words deleted)<br>5. "+str(worst_stu_name[2]).title()+" ("+str(worst_stu_add[2])+" words added, " \
-                    +str(worst_stu_del[2])+" words deleted)</p><br>"
+                worst_indiv_comp = u"\n表现不太积极的学生:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title() \
+                    +u" (0 字数添加, 0 字数删除)<br>2. "+str(zero[1]).title()+u" (0 字数添加, 0 字数删除)<br>3. "+str(worst_stu_name[0]).title() \
+                    +" ("+str(worst_stu_add[0])+u" 字数添加, "+str(worst_stu_del[0])+u" 字数删除)<br>4. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1]) \
+                    +u" 字数添加, "+str(worst_stu_del[1])+u" 字数删除)<br>5. "+str(worst_stu_name[2]).title()+" ("+str(worst_stu_add[2])+u" 字数添加, " \
+                    +str(worst_stu_del[2])+u" 字数删除)</p><br>"
             elif count==3:
-                worst_indiv_comp = u"\nTop 5 inactive students:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title()\
-                    +" (0 words added, 0 words deleted)<br>2. "+str(zero[1]).title()+" (0 words added, 0 words deleted)<br>3. "+str(zero[2]).title()+" (0 words added, " \
-                    +"0 words deleted)<br>4. "+str(worst_stu_name[0]).title()+" ("+str(worst_stu_add[0])+" words added, "+str(worst_stu_del[0]) \
-                    +" words deleted)<br>5. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1])+" words added, "+str(worst_stu_del[1])+" words deleted)</p><br>"
+                worst_indiv_comp = u"\n表现不太积极的学生:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title()\
+                    +u" (0 字数添加, 0 字数删除)<br>2. "+str(zero[1]).title()+u" (0 字数添加, 0 字数删除)<br>3. "+str(zero[2]).title()+u" (0 字数添加, " \
+                    +u"0 字数删除)<br>4. "+str(worst_stu_name[0]).title()+" ("+str(worst_stu_add[0])+u" 字数添加, "+str(worst_stu_del[0]) \
+                    +u" 字数删除)<br>5. "+str(worst_stu_name[1]).title()+" ("+str(worst_stu_add[1])+u" 字数添加, "+str(worst_stu_del[1])+u" 字数删除)</p><br>"
             elif count==4 and no_of_students > 4:
-                worst_indiv_comp = u"\nTop 5 inactive students:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title() \
-                    +" (0 words added, 0 words deleted)<br>2. "+str(zero[1]).title()+" (0 words added, 0 words deleted)<br>3. "+str(zero[2]).title()+" (0 words added, " \
-                    +"0 words deleted)<br>4. "+str(zero[3]).title()+" (0 words added, 0 words deleted)<br>5. " \
-                    +str(worst_stu_name[0]).title()+" ("+str(worst_stu_add[0])+" words added, "+str(worst_stu_del[0])+" words deleted)</p><br>"
+                worst_indiv_comp = u"\n表现不太积极的学生:<p style=\"padding-left:3em;margin:2px;\">1. "+str(zero[0]).title() \
+                    +u" (0 字数添加, 0 字数删除)<br>2. "+str(zero[1]).title()+u" (0 字数添加, 0 字数删除)<br>3. "+str(zero[2]).title()+u" (0 字数添加, " \
+                    +u"0 字数删除)<br>4. "+str(zero[3]).title()+u" (0 字数添加, 0 字数删除)<br>5. " \
+                    +str(worst_stu_name[0]).title()+" ("+str(worst_stu_add[0])+u" 字数添加, "+str(worst_stu_del[0])+u" 字数删除)</p><br>"
             elif count == no_of_students:
                 worst_indiv_comp = u""
             else:
-                worst_indiv_comp = u"\nStudents without making any revisions:<p style=\"padding-left:3em;margin:2px;\">"
+                worst_indiv_comp = u"\n没有提交修改记录的学生:<p style=\"padding-left:3em;margin:2px;\">"
                 for i in range(1,count-1):
                     worst_indiv_comp = worst_indiv_comp+str(i)+". "+str(zero[i-1]).title()+"<br>"
                 worst_indiv_comp = worst_indiv_comp+"\n"+str(count-1)+". "+str(zero[count-2]).title()+"<br>"
@@ -365,12 +364,12 @@ try:
             # Adding text up
             text = "From: wikiglass@ccmir.cite.hku.hk\nTo: " \
                     + teacher_email_i \
-                    + "\nBcc: ecswikis@gmail.com, xiaoxhu@hku.hk, xh.gslis@gmail.com, xiaoyu.lu0405@gmail.com" + "\nContent-Type: text/html\nSubject: Weekly Summary - " + class_name_i + "\n\n" \
-                    + "<html><head><title>Weekly Summary</title></head>" + "<body>Dear "+teacher_name_i+",<p><br>This is a weekly summary (" + datetime.datetime.fromtimestamp(week_start).strftime('%Y/%m/%d') \
-                    + " - "+datetime.datetime.fromtimestamp(week_end).strftime('%Y/%m/%d') + ") of students' performance in Class " \
+                    + "\nBcc: ecswikis@gmail.com, xiaoxhu@hku.hk, xh.gslis@gmail.com, xiaoyu.lu0405@gmail.com" + u"\nContent-Type: text/html\nSubject: 每周摘要 - " + class_name_i + "\n\n" \
+                    + "<html><head><title>本周摘要</title></head>" + u"<body>尊敬的 "+teacher_name_i+u",<p><br>这是本周 (" + datetime.datetime.fromtimestamp(week_start).strftime('%Y/%m/%d') \
+                    + " - "+datetime.datetime.fromtimestamp(week_end).strftime('%Y/%m/%d') + u") 学生表现的简要分析. " \
                     + class_name_i[-2:] + ". " + stat + best_group_comp + worst_group_comp + best_indiv_comp + best_indiv_comp + worst_indiv_comp \
-                    + "Please log in to <a href='http://ccmir.cite.hku.hk/wikiglass/'>Wikiglass Site</a> for more details at any time. Data on Wikiglass are updated everyday.<p><br>" \
-                    + "Yours sincerely,<br>Wikiglass</body></html>\n\n"
+                    + u"可以登录 <a href='http://ccmir.cite.hku.hk/wikiglass/'>Wikiglass</a> 以访问更多详细信息。Wikiglass网站上数据每天更新。<p><br>" \
+                    + u"祝您一切顺利!<br>Wikiglass</body></html>\n\n"
             with open(EMAIL_DIR + class_name_i + "_" + teacher_email_i+".txt", "w") as text_file:
                 text_file.write(text)
             text_file.close()
