@@ -366,8 +366,8 @@ try:
                     + teacher_email_i \
                     + "\nBcc: ecswikis@gmail.com, xiaoxhu@hku.hk, xh.gslis@gmail.com, xiaoyu.lu0405@gmail.com" + u"\nContent-Type: text/html\nSubject: 每周摘要 - " + class_name_i + "\n\n" \
                     + "<html><head><title>本周摘要</title></head>" + u"<body>尊敬的 "+teacher_name_i+u",<p><br>这是本周 (" + datetime.datetime.fromtimestamp(week_start).strftime('%Y/%m/%d') \
-                    + " - "+datetime.datetime.fromtimestamp(week_end).strftime('%Y/%m/%d') + u") 学生表现的简要分析. " \
-                    + class_name_i[-2:] + ". " + stat + best_group_comp + worst_group_comp + best_indiv_comp + best_indiv_comp + worst_indiv_comp \
+                    + " - "+datetime.datetime.fromtimestamp(week_end).strftime('%Y/%m/%d') + u") 学生表现的简要分析. 班级-" \
+                    + class_name_i + ". " + stat + best_group_comp + worst_group_comp + best_indiv_comp + best_indiv_comp + worst_indiv_comp \
                     + u"可以登录 <a href='http://ccmir.cite.hku.hk/wikiglass/'>Wikiglass</a> 以访问更多详细信息。Wikiglass网站上数据每天更新。<p><br>" \
                     + u"祝您一切顺利!<br>Wikiglass</body></html>\n\n"
             with open(EMAIL_DIR + class_name_i + "_" + teacher_email_i+".txt", "w") as text_file:
