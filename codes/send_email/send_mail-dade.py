@@ -57,6 +57,7 @@ try:
                     FROM Class_user,loginUser
                     WHERE Class_user.class_id LIKE '""" + YEAR + """dade%'
                     AND Class_user.name = loginUser.user
+                    AND Class_user.active = 1
                     AND Class_user.role = 'teacher'""")
     teacher_list = cur.fetchall()
 

@@ -58,6 +58,7 @@ try:
                     WHERE Class_user.class_id LIKE '""" + YEAR + """%'
                     AND Class_user.class_id NOT LIKE '""" + YEAR + """dade%'
                     AND Class_user.name = loginUser.user
+                    AND Class_user.active = 1
                     AND Class_user.role = 'teacher'""")
     teacher_list = cur.fetchall()
 
